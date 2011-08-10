@@ -7,17 +7,18 @@
 #include "PWM.h"
 
 #define SERVO_FREQUENCY 50
-#define MAX_COUNT F_CPU/(50*8)
+#define MAX_COUNT F_CPU/(SERVO_FREQUENCY*8)
 #define SERVO_COUNT 1
 
-int *ocr_values;
+
+int *ocr_values;	// Переменная содержит массив занчений для сервомашинок.
 
 /**
 * Функция инициялизирует ШИМ для серво приводов.
 */
 void initPWM()
 {
-	ocr_values = malloc(SERVO_COUNT);
+	ocr_values = malloc(SERVO_COUNT*sizeof(int));
 
 	// Установим дефолтные значения, серво машинки будут находится в среднем 
 	// положении.
@@ -137,12 +138,4 @@ ISR (TIMER1_COMPA_vect)
 	OCR1AH = (unsigned char)(next_ocr>>8);
 	OCR1AL = (unsigned char)next_ocr; 
 	PORTA = port_value; 
-}
-
-/**
-* Перехват прерываний на переполнение таймера.
-*/
-ISR (SIG_OVERFLOW1)		
-{
-	printf("*\n");
 }
