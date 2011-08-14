@@ -3,7 +3,8 @@
  
 #include <avr/io.h>
 #include <avr/interrupt.h>
- 
+#include "avrtypedef.h"
+
 #define i2c_MasterBytesRX 2 // Величина принимающего буфера режима Slave, т.е. сколько байт жрем.
 #define i2c_MasterBytesTX 1 // Величина Передающего буфера режима Slave , т.е. сколько байт отдаем за сессию.
  
@@ -25,7 +26,7 @@
 #define MACRO_i2c_WhatDo_SlaveOut (SlaveOutFunc)();
 #define MACRO_i2c_WhatDo_ErrorOut (ErrorOutFunc)();
  
-typedef unsigned char u08;
+
 typedef void (*IIC_F)(void); // Тип указателя на функцию
  
 IIC_F MasterOutFunc; // Подрбрости в сишнике.
