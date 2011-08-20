@@ -3,16 +3,17 @@
 #endif
 
 #include <avr/io.h>
-#include <util/delay.h>
-#include <stdio.h>
-#include <stdlib.h>
+//#include <stdio.h>
+//#include <stdlib.h>
 #include <avr/interrupt.h>
-#include <string.h>
+//#include <string.h>
 
 #include "UART.h"
 #include "PWM.h"
 #include "I2C.h"
 #include "SPISlave.h"
+
+#define SERVO_COUNT 2
 
 ISR(__vector_default)
 {
@@ -24,19 +25,45 @@ void out_pin(u08 servo, u08 value)
 	if (servo == 0)
 	{
 		if (value == 0)
-			PORTA &=~(1<<0);
+			PORTD &=~(1<<PD4);
 		else
-			PORTA |= (1<<0);
+			PORTD |= (1<<PD4);
 	}	
 }
 
 u08 in_pin(u08 servo)
 {
-	if (servo == 0)
-		if ((PIND&(1<<7)) > 0 )
-			return 1;
-	
+    switch(servo) 
+    {
+  		case 0:
+ 			return (PINB>>PB6)&1;
+  		case 1:
+			return (~(PINB>>PB7))&1;
+	}
 	return 0;
+}
+
+void i2c_write(u08 address, u08 data)
+{
+	if (address < 0)
+		return;
+	if (address >= SERVO_COUNT*sizeof(u16))
+		return;
+	
+	u08 *_out_values = (u08*)get_out_values();
+    _out_values[address] = data;
+}
+
+u08 i2c_read(u08 address)
+{
+
+	if (address < 0)
+		return 0;
+	if (address >= SERVO_COUNT*sizeof(u16))
+		return 0;
+
+	u08 *_in_values = (u08*)get_in_values();
+	return _in_values[address];
 }
 
 int main(void)
@@ -46,51 +73,59 @@ int main(void)
 	sei();
 
 	// Инициализируем UART.
-	initUART();
+//	initUART();
 	// Через некоторое время инициализируем ШИМ сервоприводов.
-	_delay_ms(100);
-	printf("Starting pwm.\n");
 	
-	DDRA |= 1;
-	DDRD &=~(1<<7);
-//	PORTD |= (1<<7);
+	// Установка выходных портов ШИМ.
+	DDRD |= (1<<PD4);
 
-	initPWM(&out_pin, &in_pin);
+	// Установка входных портов ШИМ.
+	DDRB &=~(1<<PB6);
+	DDRB &=~(1<<PB7);
+	PORTB |= (1<<PB7);
+
+	initPWM(SERVO_COUNT, &out_pin, &in_pin);
 
 	//_delay_ms(100);
 	//printf("Starting SPI slave.\n");
 	//SPISlaveInit();
 	
-//	_delay_ms(100);
-//	printf("Starting i2c.\n");
-//	i2c_InBuff[0] = 5;
-//	i2c_OutBuff[0] = 6;
-//	Init_Slave_i2c();
+	// Запустим на 0x19 адресе, не будем воспрнимать широковещательные пакеты.
+	i2c_init_slave(0x19, 0, &i2c_write, &i2c_read);
 
-	printf("Spectator started.\n");
-
+//	printf("Started.\n");
 	// 
-	DDRB |= 1;
-	PORTB = 0x01;
+	DDRC |= (1<<PC2);
+	PORTC |= (1<<PC2);
 	while (1)
 	{
-		checkPins();
+		cli();
+		int counter_value = (TCNT1L) | (TCNT1H<<8);
+		if (counter_value >= 20000)
+		{
+			TCNT1H = 0;
+			TCNT1L = 0;
+			counter_value = 0;
+		}
+		sei();
+
+
+		pwm_check_in(counter_value);
+		pwm_check_out(counter_value);
 
 		if (loop_counter > 50)
 		{
 			loop_counter = 0;
-		//	set_out_value(0, get_in_value(0));
-			printf("Led on.\n");
-			int k = get_in_value(0);
-			printf("S0: %d\n", k);
+//			printf("Led on.\n");
+//			printf("S0: %d\n", get_in_value(0));
 			if (f == 1)
 			{
-				PORTB = 0x00;
+				PORTC &=~(1<<PC2);
 				f = 0;
 			}
 			else
 			{
-				PORTB = 0x01;
+				PORTC |= (1<<PC2);
 				f = 1;
 			}
 		}
@@ -118,18 +153,18 @@ int main(void)
 	return 0;
 }
 
-void executed_comand(char *command, int len)
-{
-	if (strcmp(command, "+") == 0)
-	{
+//void executed_comand(char *command, int len)
+//{
+//	if (strcmp(command, "+") == 0)
+//	{
 //		inc_servo(0, 100);
 //		printf("Increment servo. Value: %d \n", get_servo(0));
-	}
+//	}
 
-	if (strcmp(command, "-") == 0)
-	{
+//	if (strcmp(command, "-") == 0)
+//	{
 //		dec_servo(0, 100);
 //		printf("Decremrnt servo. Value: %d \n", get_servo(0));
-	}
+//	}
 
-}
+//}

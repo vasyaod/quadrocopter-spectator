@@ -9,7 +9,7 @@ typedef struct _Element Element;
 
 struct _Element
 {
-	unsigned char data;
+	char data;
 	Element *next;
 };
 

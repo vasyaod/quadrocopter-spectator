@@ -17,10 +17,12 @@ Element *first;
 Element *last;
 
 // Набор переменных входящего буффера.
-#define MAX_INPUT_BUFFER 128
+#define MAX_INPUT_BUFFER 32
 
 int input_buffer_index = 0;
+
 char *input_buffer;
+char *output_buffer;
 
 /**
 * Вывод символа в UART.
@@ -28,12 +30,16 @@ char *input_buffer;
 static int uart_putchar(char c, FILE *stream)
 {
 	
-	if (output_buffer_index+1 >= MAX_INPUT_BUFFER)
-		return 0; // буффер переполнен, сваливаем....
-
 	if (c == '\n')
     	uart_putchar('\r', stream);
+	
+	cli();
+	if (output_buffer_index+2 >= MAX_INPUT_BUFFER)
+		return 0; // буффер переполнен, сваливаем....
 
+	output_buffer[output_buffer_index] = c;
+
+/*
 	Element *newElement = (Element*)malloc(sizeof(Element));
 	newElement->data = c;
 
@@ -47,12 +53,11 @@ static int uart_putchar(char c, FILE *stream)
 		last->next = newElement;
 		last = newElement;
 	}
-	
+*/	
 	output_buffer_index ++;
 	UCSRB |= 1 << UDRIE;
+	sei();
 
-//	loop_until_bit_is_set(UCSRA, UDRE);
-//	UDR = c;
 	return 0;
 }
 
@@ -64,15 +69,22 @@ ISR (USART_UDRE_vect)
 	}
 	else 
 	{
+/*
 		UDR = first->data;			// Берем данные из буффера.
 		Element *_tmp = first;		
 		first = _tmp->next;
-		output_buffer_index--;
 		free(_tmp);
+*/
+		UDR = output_buffer[0];
+		output_buffer_index--;
+		unsigned char i = 0;
+		for (i = 0; i < output_buffer_index; i++)
+			output_buffer[i] = output_buffer[i+1];
+
 	}
 	
 }
-
+/*
 ISR (USART_RXC_vect)		
 {
 	char data = UDR;
@@ -95,13 +107,14 @@ ISR (USART_RXC_vect)
 		input_buffer_index++;
 	}
 }
-
+*/
 /**
 * Инициализация UART.
 */
 void initUART()
 {
-	input_buffer = malloc(MAX_INPUT_BUFFER);
+//	input_buffer = malloc(MAX_INPUT_BUFFER);
+	output_buffer = malloc(MAX_INPUT_BUFFER);
 
 	UCSRA=0x00;
 	UCSRB=0xD8;
