@@ -11,16 +11,14 @@
 
 //#define USE_INTERRUPT 0
 
-u08 servo_count = 1;
+u16 out_values[SERVO_COUNT];			// Массив выходных значений для серво.
+u16 in_values[SERVO_COUNT];				// Массив входных значений.
+u16 in_values_tmp[SERVO_COUNT][FILTER];	// Массив входных значений.
 
-u16 out_values[6];			// Массив выходных значений для серво.
-u16 in_values[6];			// Массив входных значений.
-u16 in_values_tmp[6][FILTER];	// Массив входных значений.
-
-u08 pin_state[6];			// Хранит состояние входных ножек.
-u08 pin_state_tmp[6];		// 
-u16 pin_couter_value[6];	// Хрант значение счетчика вмомент когда ножка 
-							// переключилась из 0 в 1.
+u08 pin_state[SERVO_COUNT];			// Хранит состояние входных ножек.
+u08 pin_state_tmp[SERVO_COUNT];		// 
+u16 pin_couter_value[SERVO_COUNT];	// Хрант значение счетчика вмомент когда ножка 
+									// переключилась из 0 в 1.
 out_pin_f out_pin;
 in_pin_f in_pin;
 
@@ -34,20 +32,19 @@ u08 out_off = 0;
 /**
 * Функция инициялизирует ШИМ для серво приводов.
 */
-void initPWM(u08 _servo_count, out_pin_f _out_pin, in_pin_f _in_pin)
+void initPWM(out_pin_f _out_pin, in_pin_f _in_pin)
 {
 	out_pin = _out_pin;
 	in_pin = _in_pin;
-	servo_count = _servo_count;
 
 	//////////////////////
 	// Настройки выходного ШИМ.
 
-	//out_values = malloc(servo_count*sizeof(u16));
+	//out_values = malloc(SERVO_COUNT*sizeof(u16));
    
 	// Установим дефолтные значения, серво машинки будут находится в среднем 
 	// положении.
-	for (u08 i=0; i<servo_count; i++)
+	for (u08 i=0; i<SERVO_COUNT; i++)
 		out_values[i] = (MAX_COUNT/200)*15;
 
 	// Настройки счетчика Т1.
@@ -64,13 +61,13 @@ void initPWM(u08 _servo_count, out_pin_f _out_pin, in_pin_f _in_pin)
 	//////////////////////
 	// Настройки входного ШИМ.
 
-	//pin_state = malloc(servo_count*sizeof(u08));
-	//pin_state_tmp = malloc(servo_count*sizeof(u08));
-	//pin_couter_value = malloc(servo_count*sizeof(u16));
-	//in_values = malloc(servo_count*sizeof(u16));
+	//pin_state = malloc(SERVO_COUNT*sizeof(u08));
+	//pin_state_tmp = malloc(SERVO_COUNT*sizeof(u08));
+	//pin_couter_value = malloc(SERVO_COUNT*sizeof(u16));
+	//in_values = malloc(SERVO_COUNT*sizeof(u16));
 
 	// Инициализация.
-	for (u08 i=0; i<servo_count; i++)
+	for (u08 i=0; i<SERVO_COUNT; i++)
 	{
 		pin_state[i] = 0;
 		pin_couter_value[i] = 0;
@@ -114,7 +111,7 @@ void closePWM()
 */
 u16 get_out_value(u08 servo_number)
 {
-	if (servo_number <= servo_count)
+	if (servo_number <= SERVO_COUNT)
 	{
 		cli();
 		u16 res = out_values[servo_number];
@@ -138,7 +135,7 @@ u16 *get_out_values()
 */ 
 void set_out_value(u08 servo_number, u16 value)
 {
-	if (servo_number <= servo_count)
+	if (servo_number <= SERVO_COUNT)
 	{
 		cli();
 		out_values[servo_number] = value;
@@ -151,7 +148,7 @@ void set_out_value(u08 servo_number, u16 value)
 */
 u16 get_in_value(u08 servo_number)
 {
-	if (servo_number <= servo_count)
+	if (servo_number <= SERVO_COUNT)
 	{
 		cli();
 		u16 res = in_values[servo_number];
@@ -216,16 +213,16 @@ void pwm_check_in(u16 counter_value)
 	interrupt = 0;
 #endif
 
-//	out_pin(0, in_pin(0));
+	//out_pin(0, in_pin(0));
 	// Времено сохраним значения в память.
-  //  for (u08 i=0; i<servo_count; i++)
-//		pin_state_tmp[i] = in_pin(i);
+    for (u08 i=0; i<SERVO_COUNT; i++)
+		pin_state_tmp[i] = in_pin(i);
 
 	// Проверяем на какой ножке сработало прерывание.
-    for (u08 i=0; i<servo_count; i++)
+    for (u08 i=0; i<SERVO_COUNT; i++)
 	{
-		u08 _in_pin = in_pin(i);
-	//	u08 _in_pin = pin_state_tmp[i];
+	//	u08 _in_pin = in_pin(i);
+		u08 _in_pin = pin_state_tmp[i];
 
 		if (pin_state[i] == 0 && _in_pin == 1)
 		{
@@ -268,21 +265,21 @@ void pwm_check_in(u16 counter_value)
 ISR (TIMER1_COMPA_vect)		
 {
 
-//	int counter = (TCNT1H<<8) | (TCNT1L);
-//	int next_ocr = MAX_COUNT;
+	//u16 counter = (TCNT1H<<8) | (TCNT1L);
+	//int next_ocr = MAX_COUNT;
 
-//	if (counter >= MAX_COUNT)
-//	{
-//		loop_counter++;
-//		TCNT1H = 0;
-//		TCNT1L = 0;
+	//if (counter >= MAX_COUNT)
+	//{
+	//	loop_counter++;
+	//	TCNT1H = 0;
+	//	TCNT1L = 0;
 	//	counter = 0;
-//	}
+	//}
 	/*
 	if (counter < 2100)
 	{
 		next_ocr = 2100;
-		for (u08 i=0; i<servo_count; i++)
+		for (u08 i=0; i<SERVO_COUNT; i++)
 		{
 			if (out_values[i] > 0 && out_values[i] > counter)
 			{
@@ -296,7 +293,7 @@ ISR (TIMER1_COMPA_vect)
 	}
 	else
 	{
-		for (u08 i=0; i<servo_count; i++)
+		for (u08 i=0; i<SERVO_COUNT; i++)
 		{
 			out_pin(i, 0);	
 		}
@@ -311,7 +308,7 @@ void pwm_check_out(u16 counter_value)
 {
 	if (counter_value < 2100)
 	{
-		for (u08 i=0; i<servo_count; i++)
+		for (u08 i=0; i<SERVO_COUNT; i++)
 		{
 			if (out_values[i] > 0 && out_values[i] > counter_value)
 				out_pin(i, 1);	
@@ -322,7 +319,7 @@ void pwm_check_out(u16 counter_value)
 	}
 	else
 	{
-		for (u08 i=0; i<servo_count; i++)
+		for (u08 i=0; i<SERVO_COUNT; i++)
 			out_pin(i, 0);
 		out_off = 0; 
 	}

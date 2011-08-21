@@ -8,12 +8,11 @@
 #include <avr/interrupt.h>
 //#include <string.h>
 
-#include "UART.h"
+//#include "UART.h"
+#include "gyro.h"
 #include "PWM.h"
 #include "I2C.h"
-#include "SPISlave.h"
-
-#define SERVO_COUNT 2
+//#include "SPISlave.h"
 
 ISR(__vector_default)
 {
@@ -47,23 +46,28 @@ void i2c_write(u08 address, u08 data)
 {
 	if (address < 0)
 		return;
-	if (address >= SERVO_COUNT*sizeof(u16))
-		return;
-	
-	u08 *_out_values = (u08*)get_out_values();
-    _out_values[address] = data;
+	else if (address < SERVO_COUNT*sizeof(u16))
+	{
+		u08 *_out_values = (u08*)get_out_values();
+    	_out_values[address] = data;
+	}
 }
 
 u08 i2c_read(u08 address)
 {
-
 	if (address < 0)
 		return 0;
-	if (address >= SERVO_COUNT*sizeof(u16))
-		return 0;
-
-	u08 *_in_values = (u08*)get_in_values();
-	return _in_values[address];
+	else if (address < SERVO_COUNT*sizeof(u16))
+	{
+		u08 *values = (u08*)get_in_values();
+		return values[address];		
+	}
+	else if (address < SERVO_COUNT*sizeof(u16)+4)
+	{
+		u08 *values = (u08*)get_gyro_values();
+		return values[address-SERVO_COUNT*sizeof(u16)];
+	}
+	return 0;
 }
 
 int main(void)
@@ -84,7 +88,10 @@ int main(void)
 	DDRB &=~(1<<PB7);
 	PORTB |= (1<<PB7);
 
-	initPWM(SERVO_COUNT, &out_pin, &in_pin);
+	initPWM(&out_pin, &in_pin);
+
+	// Инициализация ADC гироскопов.
+	initADC();
 
 	//_delay_ms(100);
 	//printf("Starting SPI slave.\n");
@@ -96,7 +103,7 @@ int main(void)
 //	printf("Started.\n");
 	// 
 	DDRC |= (1<<PC2);
-	PORTC |= (1<<PC2);
+	//PORTC |= (1<<PC2);
 	while (1)
 	{
 		cli();
@@ -106,6 +113,7 @@ int main(void)
 			TCNT1H = 0;
 			TCNT1L = 0;
 			counter_value = 0;
+			loop_counter++;
 		}
 		sei();
 
@@ -116,18 +124,19 @@ int main(void)
 		if (loop_counter > 50)
 		{
 			loop_counter = 0;
+			PORTC &= ~(1<<PC2);
 //			printf("Led on.\n");
 //			printf("S0: %d\n", get_in_value(0));
-			if (f == 1)
-			{
-				PORTC &=~(1<<PC2);
-				f = 0;
-			}
-			else
-			{
-				PORTC |= (1<<PC2);
-				f = 1;
-			}
+//			if (f == 1)
+//			{
+//				PORTC &=~(1<<PC2);
+//				f = 0;
+//			}
+//			else
+//			{
+//				PORTC |= (1<<PC2);
+//				f = 1;
+//			}
 		}
 		
 /*

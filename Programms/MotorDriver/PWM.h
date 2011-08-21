@@ -3,13 +3,15 @@
 
 #include "avrtypedef.h"
 
+#define SERVO_COUNT 6
+
 typedef void (*out_pin_f)(u08, u08);
 typedef u08 (*in_pin_f)(u08);
 
 /**
 * Инициализирует ШИМ серво машинок.
 */
-void initPWM(u08 servo_count, out_pin_f out_pin, in_pin_f in_pin);
+void initPWM(out_pin_f out_pin, in_pin_f in_pin);
 
 /**
 * Закрывает ШИМ.

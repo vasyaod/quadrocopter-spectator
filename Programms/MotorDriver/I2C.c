@@ -17,6 +17,9 @@ i2c_read_f i2c_read;
  
 ISR(TWI_vect) // Прерывание TWI Тут наше все.
 {
+	PORTC |= (1<<PC2);
+//	return;
+
     switch(TWSR & 0xF8) // Отсекаем биты прескалера
     {
     	case 0x00: // Bus Fail (автобус сломался)
@@ -196,7 +199,6 @@ ISR(TWI_vect) // Прерывание TWI Тут наше все.
 
 void i2c_init_slave(u08 slave_address, u08 broadcast, i2c_write_f _i2c_write, i2c_read_f _i2c_read)
 {
-	
 	i2c_write = _i2c_write;
 	i2c_read = _i2c_read;
 	// 
