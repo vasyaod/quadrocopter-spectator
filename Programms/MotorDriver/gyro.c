@@ -46,6 +46,8 @@ ISR (ADC_vect)
 
 	if (current_gyro == 0)
 		current_gyro = 1;
+	else
+		current_gyro = 0;
 
 	// Переключим вход АЦП на другую ногу.
 	ADMUX &= 0xF8;

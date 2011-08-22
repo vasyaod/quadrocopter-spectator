@@ -21,13 +21,48 @@ ISR(__vector_default)
 
 void out_pin(u08 servo, u08 value)
 {
-	if (servo == 0)
+	if (value == 0)
 	{
-		if (value == 0)
-			PORTD &=~(1<<PD4);
-		else
-			PORTD |= (1<<PD4);
-	}	
+	    switch(servo) 
+	    {
+	  		case 0:
+				PORTD &=~(1<<PD2);
+				break;
+	  		case 1:
+				PORTD &=~(1<<PD3);
+				break;
+	  		case 2:
+				PORTD &=~(1<<PD4);
+				break;
+	  		case 3:
+				PORTB &=~(1<<PB1);
+				break;
+	  		case 4:
+				PORTC &=~(1<<PC2);
+				break;
+		}
+	}
+	else
+	{
+	    switch(servo) 
+	    {
+	  		case 0:
+				PORTD |= (1<<PD2);
+				break;
+	  		case 1:
+				PORTD |= (1<<PD3);
+				break;
+	  		case 2:
+				PORTD |= (1<<PD4);
+				break;
+	  		case 3:
+				PORTB |= (1<<PB1);
+				break;
+	  		case 4:
+				PORTC |= (1<<PC2);
+				break;
+		}
+	}
 }
 
 u08 in_pin(u08 servo)
@@ -35,9 +70,15 @@ u08 in_pin(u08 servo)
     switch(servo) 
     {
   		case 0:
- 			return (PINB>>PB6)&1;
+			return (PINB>>PB7)&1;
   		case 1:
-			return (~(PINB>>PB7))&1;
+			return (PIND>>PD5)&1;
+  		case 2:
+			return (PIND>>PD6)&1;
+  		case 3:
+			return (PIND>>PD7)&1;
+  		case 4:
+			return (PINB>>PB0)&1;
 	}
 	return 0;
 }
@@ -81,12 +122,20 @@ int main(void)
 	// Через некоторое время инициализируем ШИМ сервоприводов.
 	
 	// Установка выходных портов ШИМ.
+	DDRD |= (1<<PD2);
+	DDRD |= (1<<PD3);
 	DDRD |= (1<<PD4);
+	DDRB |= (1<<PB1);
+	DDRC |= (1<<PC2);
+
+
 
 	// Установка входных портов ШИМ.
-	DDRB &=~(1<<PB6);
 	DDRB &=~(1<<PB7);
-	PORTB |= (1<<PB7);
+	DDRD &=~(1<<PD5);
+	DDRD &=~(1<<PD6);
+	DDRD &=~(1<<PD7);
+	DDRB &=~(1<<PB0);
 
 	initPWM(&out_pin, &in_pin);
 
@@ -102,8 +151,10 @@ int main(void)
 
 //	printf("Started.\n");
 	// 
-	DDRC |= (1<<PC2);
-	//PORTC |= (1<<PC2);
+	DDRD |= (1<<PD0);
+	DDRD |= (1<<PD1);
+	PORTD |= (1<<PD0);
+
 	while (1)
 	{
 		cli();
@@ -124,19 +175,12 @@ int main(void)
 		if (loop_counter > 50)
 		{
 			loop_counter = 0;
-			PORTC &= ~(1<<PC2);
-//			printf("Led on.\n");
-//			printf("S0: %d\n", get_in_value(0));
-//			if (f == 1)
-//			{
-//				PORTC &=~(1<<PC2);
-//				f = 0;
-//			}
-//			else
-//			{
-//				PORTC |= (1<<PC2);
-//				f = 1;
-//			}
+			PORTD &= ~(1<<PD0);
+			if (f == 1)
+				PORTD &=~(1<<PD1);
+			else
+				PORTD |= (1<<PD1);
+			f = ~f;
 		}
 		
 /*

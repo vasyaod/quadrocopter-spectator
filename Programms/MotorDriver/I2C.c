@@ -17,7 +17,7 @@ i2c_read_f i2c_read;
  
 ISR(TWI_vect) // Прерывание TWI Тут наше все.
 {
-	PORTC |= (1<<PC2);
+	PORTD |= (1<<PD0);
 //	return;
 
     switch(TWSR & 0xF8) // Отсекаем биты прескалера

@@ -251,8 +251,8 @@ void pwm_check_in(u16 counter_value)
 			
 			in_values[i] /= FILTER;
 
-			if (i == 0)
-				set_out_value(0, in_values[i]);
+//			if (i == 0)
+//				set_out_value(0, in_values[i]);
 		}
 
 	}
