@@ -43,9 +43,10 @@ u16 get_in_value(u08 servo_number);
 */ 
 u16 *get_in_values();
 
-void pwm_check_in(u16 counter_value);
+void pwm_check_in(int counter_value);
 
-void pwm_check_out(u16 counter_value);
+void pwm_check_out(int counter_value);
+void pwm_check_out2();
 
 extern u16 loop_counter;
 

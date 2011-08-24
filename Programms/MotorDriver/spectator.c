@@ -25,7 +25,7 @@ void out_pin(u08 servo, u08 value)
 	{
 	    switch(servo) 
 	    {
-	  		case 0:
+			case 0:
 				PORTD &=~(1<<PD2);
 				break;
 	  		case 1:
@@ -161,16 +161,18 @@ int main(void)
 		int counter_value = (TCNT1L) | (TCNT1H<<8);
 		if (counter_value >= 20000)
 		{
-			TCNT1H = 0;
-			TCNT1L = 0;
-			counter_value = 0;
-			loop_counter++;
+			pwm_check_out2();
+//			TCNT1H = 0;
+//			TCNT1L = 0;
+//			counter_value = 0;
+//			loop_counter++;
 		}
 		sei();
 
 
+
 		pwm_check_in(counter_value);
-		pwm_check_out(counter_value);
+//		pwm_check_out(counter_value);
 
 		if (loop_counter > 50)
 		{
