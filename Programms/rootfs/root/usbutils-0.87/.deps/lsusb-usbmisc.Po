@@ -1,0 +1,138 @@
+lsusb-usbmisc.o lsusb-usbmisc.o: usbmisc.c \
+  /home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/stdio.h \
+  /home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/features.h \
+  /home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/bits/predefs.h \
+  /home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/sys/cdefs.h \
+  /home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/bits/wordsize.h \
+  /home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/gnu/stubs.h \
+  /usr/local/arm/4.2.0/bin/../lib/gcc/arm-none-linux-gnueabi/4.2.0/include/stddef.h \
+  /home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/bits/types.h \
+  /home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/bits/typesizes.h \
+  /home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/libio.h \
+  /home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/_G_config.h \
+  /home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/wchar.h \
+  /home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/bits/wchar.h \
+  /home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/gconv.h \
+  /usr/local/arm/4.2.0/bin/../lib/gcc/arm-none-linux-gnueabi/4.2.0/include/stdarg.h \
+  /home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/bits/stdio_lim.h \
+  /home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/bits/sys_errlist.h \
+  /home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/string.h \
+  config.h usbmisc.h \
+  /home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/usb.h \
+  /home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/unistd.h \
+  /home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/bits/posix_opt.h \
+  /home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/bits/confname.h \
+  /home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/getopt.h \
+  /home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/stdlib.h \
+  /home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/sys/types.h \
+  /home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/time.h \
+  /home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/endian.h \
+  /home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/bits/endian.h \
+  /home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/sys/select.h \
+  /home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/bits/select.h \
+  /home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/bits/sigset.h \
+  /home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/bits/time.h \
+  /home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/sys/sysmacros.h \
+  /home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/bits/pthreadtypes.h \
+  /home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/alloca.h \
+  /usr/local/arm/4.2.0/bin/../lib/gcc/arm-none-linux-gnueabi/4.2.0/include-fixed/limits.h \
+  /usr/local/arm/4.2.0/bin/../lib/gcc/arm-none-linux-gnueabi/4.2.0/include-fixed/syslimits.h \
+  /home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/limits.h \
+  /home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/bits/posix1_lim.h \
+  /home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/bits/local_lim.h \
+  /home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/linux/limits.h \
+  /home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/bits/posix2_lim.h \
+  /home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/dirent.h \
+  /home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/bits/dirent.h
+
+/home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/stdio.h:
+
+/home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/features.h:
+
+/home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/bits/predefs.h:
+
+/home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/sys/cdefs.h:
+
+/home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/bits/wordsize.h:
+
+/home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/gnu/stubs.h:
+
+/usr/local/arm/4.2.0/bin/../lib/gcc/arm-none-linux-gnueabi/4.2.0/include/stddef.h:
+
+/home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/bits/types.h:
+
+/home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/bits/typesizes.h:
+
+/home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/libio.h:
+
+/home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/_G_config.h:
+
+/home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/wchar.h:
+
+/home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/bits/wchar.h:
+
+/home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/gconv.h:
+
+/usr/local/arm/4.2.0/bin/../lib/gcc/arm-none-linux-gnueabi/4.2.0/include/stdarg.h:
+
+/home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/bits/stdio_lim.h:
+
+/home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/bits/sys_errlist.h:
+
+/home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/string.h:
+
+config.h:
+
+usbmisc.h:
+
+/home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/usb.h:
+
+/home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/unistd.h:
+
+/home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/bits/posix_opt.h:
+
+/home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/bits/confname.h:
+
+/home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/getopt.h:
+
+/home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/stdlib.h:
+
+/home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/sys/types.h:
+
+/home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/time.h:
+
+/home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/endian.h:
+
+/home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/bits/endian.h:
+
+/home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/sys/select.h:
+
+/home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/bits/select.h:
+
+/home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/bits/sigset.h:
+
+/home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/bits/time.h:
+
+/home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/sys/sysmacros.h:
+
+/home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/bits/pthreadtypes.h:
+
+/home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/alloca.h:
+
+/usr/local/arm/4.2.0/bin/../lib/gcc/arm-none-linux-gnueabi/4.2.0/include-fixed/limits.h:
+
+/usr/local/arm/4.2.0/bin/../lib/gcc/arm-none-linux-gnueabi/4.2.0/include-fixed/syslimits.h:
+
+/home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/limits.h:
+
+/home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/bits/posix1_lim.h:
+
+/home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/bits/local_lim.h:
+
+/home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/linux/limits.h:
+
+/home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/bits/posix2_lim.h:
+
+/home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/dirent.h:
+
+/home/vasyaod/work/SK-9G45-OEM/buildroot-2010.08/output/staging/usr/include/bits/dirent.h:

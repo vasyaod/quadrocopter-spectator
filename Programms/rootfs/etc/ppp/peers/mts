@@ -1,0 +1,4 @@
+file /etc/ppp/options
+user mts
+password mts
+connect "/usr/sbin/chat -V -t20 -f /etc/ppp/mts.chat"

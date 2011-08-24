@@ -1,0 +1,27 @@
+#!/bin/ash
+
+# Script for SK-SIMCOM-Plug power management
+
+#echo 1 > /dev/simcom_pwr
+#sleep 2
+#echo 0 > /dev/simcom_pwr
+#sleep 1
+
+/bin/SK-SIMCOM-Plug/simcom_gpio_prepare
+
+/bin/echo Please put J1 to 2-3 position or turn on modem manualy!!!
+
+# Script for SK-SIMCOM-Plug power management
+# PB29 = 32*2 + 29 = 93
+
+/bin/echo "93" > /sys/class/gpio/export
+/bin/echo "out" > /sys/class/gpio/gpio93/direction
+
+/bin/echo "1" > /sys/class/gpio/gpio93/value
+sleep 2
+
+/bin/echo "0" > /sys/class/gpio/gpio93/value
+sleep 2
+
+/bin/echo "1" > /sys/class/gpio/gpio93/value
+sleep 1

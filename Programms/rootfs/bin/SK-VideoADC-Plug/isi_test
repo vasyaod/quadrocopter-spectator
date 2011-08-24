@@ -1,0 +1,3 @@
+#!/bin/sh
+capt -o image.ppm
+echo image.ppm can be opened in PhotoShop

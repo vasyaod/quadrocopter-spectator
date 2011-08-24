@@ -1,0 +1,9 @@
+#!/bin/ash
+
+# Script for SK-SIMCOM-Plug management
+
+press_gsm_pwr_key
+echo If use SIM5218, must be close RTS-CTS lines!
+echo Now can try type AT commans:
+echo Press Ctrl-X to exit
+microcom -s 115200 /dev/ttyS1

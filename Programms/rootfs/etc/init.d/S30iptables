@@ -1,0 +1,36 @@
+#!/bin/sh
+
+IPT=/usr/sbin/iptables
+
+start() {
+	echo "Starting iptables ..."
+	$IPT -P INPUT ACCEPT
+	
+	$IPT -A INPUT -p tcp --dport 23 ! -s 192.168.0.0/16 -j DROP
+	$IPT -A INPUT -p tcp --dport 21 ! -s 192.168.0.0/16 -j DROP
+}	
+stop() {
+	echo "Stoping iptables ..."
+}
+restart() {
+	stop
+	start
+}	
+
+case "$1" in
+  start)
+  	start
+	;;
+  stop)
+  	stop
+	;;
+  restart|reload)
+  	restart
+	;;
+  *)
+	echo $"Usage: $0 {start|stop|restart}"
+	exit 1
+esac
+
+exit $?
+

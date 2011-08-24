@@ -1,0 +1,19 @@
+#!/bin/ash
+
+# Script for SK-SIMCOM-Plug management
+
+#echo 2 > /dev/simcom_pwr
+#PB29 = 32*2 + 29 = 93
+echo Please put J1 to 1-2 position
+
+/bin/echo "93" > /sys/class/gpio/export
+/bin/echo "out" > /sys/class/gpio/gpio93/direction
+
+/bin/echo "0" > /sys/class/gpio/gpio93/value
+sleep 1 
+
+echo Use ONLY with SIM5X8 modem
+echo Must be sellected on plug GPS UART-B port.
+echo Press Ctrl+X to exit
+echo Now You can see NMEA sequence:
+microcom -s 4800 /dev/ttyS2

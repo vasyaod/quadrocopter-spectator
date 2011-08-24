@@ -1,0 +1,8 @@
+#!/bin/sh
+
+rm /var/run/ppp0.pid > /dev/null
+while :
+do
+    [ ! -e '/var/run/ppp0.pid' ] && /usr/sbin/pppd call mts &> /dev/null
+    sleep 30
+done

@@ -1,0 +1,11 @@
+#!/bin/sh
+umount /mnt/nand
+ubidetach /dev/ubi_ctrl -m 1
+
+echo "Erase NAND flash ..."
+flash_eraseall /dev/mtd1
+echo "UBI operatings ..."
+ubiformat /dev/mtd1
+ubiattach /dev/ubi_ctrl -m 1
+ubimkvol /dev/ubi0 -N nandfs -s 200MiB
+#reboot

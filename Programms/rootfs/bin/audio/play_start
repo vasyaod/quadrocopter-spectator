@@ -1,0 +1,5 @@
+#!/bin/ash
+
+#mplayer -ac mad /bin/audio/start.mp3 > /dev/null
+
+mplayer /bin/audio/start.mp3 > /dev/null

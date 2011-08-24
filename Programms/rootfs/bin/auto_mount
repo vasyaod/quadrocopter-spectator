@@ -1,0 +1,10 @@
+#!/bin/sh
+
+if grep -q "$MDEV" /proc/mounts; then
+  umount -l /dev/$MDEV
+  rmdir /mnt/$MDEV
+else 
+  mkdir /mnt/$MDEV
+#  mount -o sync /dev/$MDEV /mnt/$MDEV
+  mount /dev/$MDEV /mnt/$MDEV
+fi

@@ -1,0 +1,9 @@
+#!/bin/ash
+
+rm /tmp/record.wav
+echo Next 5 seconds will be recording from microphone input ...
+arecord -r 48000 -t wav -f S16_LE -d 5 /tmp/record.wav
+echo Now playing record ...
+aplay /tmp/record.wav
+
+

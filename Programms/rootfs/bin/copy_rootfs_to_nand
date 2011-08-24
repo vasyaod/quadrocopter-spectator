@@ -1,0 +1,9 @@
+#!/bin/sh
+cd /mnt/nand
+echo "Copy rootfs.tgz from 192.168.0.2 ..."
+tftp -g -b 4096 -r rootfs.tgz 192.168.0.2
+echo "Extract filesystem to NAND flash ..."
+#gunzip ./rootfs.tgz
+tar xzvf ./rootfs.tgz
+rm ./rootfs.tgz
+#reboot

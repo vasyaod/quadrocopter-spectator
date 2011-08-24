@@ -1,0 +1,5 @@
+#!/bin/sh
+nand_ubi_format
+mount -t ubifs ubi0:nandfs /mnt/nand
+sleep 1
+copy_rootfs_to_nand

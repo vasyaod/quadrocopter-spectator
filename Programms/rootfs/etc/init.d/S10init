@@ -1,0 +1,40 @@
+#!/bin/sh
+#
+# Start the system
+#
+    echo "Kernel modules loading ..."
+    /sbin/modprobe tun
+    /sbin/modprobe ppp_generic
+    /sbin/modprobe usbserial
+    /sbin/modprobe option
+#    /sbin/modprobe g_hid
+#    /sbin/modprobe g_cdc
+#    /sbin/modprobe g_serial
+#    /sbin/modprobe usblp.ko
+#    /sbin/modprobe usbtmc.ko
+#    /sbin/modprobe usbmon.ko
+                           
+
+    echo "Device mounting ..."
+    /bin/mount -t proc proc /proc
+    /bin/mount -t sysfs sysfs /sys
+
+    /bin/mount -t tmpfs mdev /dev
+    /bin/mkdir /dev/pts
+    /bin/mount -t devpts devpts /dev/pts
+
+    # Disabled disk cache
+    echo 2 > /proc/sys/vm/drop_caches
+    
+    /bin/echo /sbin/mdev > /proc/sys/kernel/hotplug
+    /sbin/mdev -s
+
+    /sbin/watchdog -T 4 /dev/watchdog
+
+    /bin/mount -a
+    
+#    /usr/sbin/ubiattach /dev/ubi_ctrl -m 1
+#    /bin/mount -t ubifs ubi0:nandfs /mnt/nand
+
+#    /sbin/modprobe ehci_hcd
+    

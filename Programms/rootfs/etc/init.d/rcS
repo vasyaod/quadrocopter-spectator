@@ -1,0 +1,45 @@
+#!/bin/sh
+
+
+# Start all init scripts in /etc/init.d
+# executing them in numerical order.
+#
+for i in /etc/init.d/S??* ;do
+
+     # Ignore dangling symlinks (if any).
+     [ ! -f "$i" ] && continue
+
+     case "$i" in
+	*.sh)
+	    # Source shell script for speed.
+	    (
+		trap - INT QUIT TSTP
+		set start
+		. $i
+	    )
+	    ;;
+	*)
+	    # No sh extension, so fork subprocess.
+	    $i start
+	    ;;
+    esac
+done
+
+
+rm -r /var/lock/*
+
+#/usr/sbin/inetd &
+#/usr/sbin/httpd -h /mnt/www/html &
+#/usr/sbin/telnetd
+#/usr/bin/madplay -q /etc/start.mp3 &
+echo "Welcome to SK-9G45-OEM module!" > /dev/tty1
+echo "www.starterkit.ru" > /dev/tty1
+
+# add next string for turn off screensave
+echo -e '\33[9;0]\33[14;0]' > /dev/tty1
+
+
+#mknod /dev/simcom_pwr c 135 0
+
+#/bin/audio/volume_tune
+#/bin/audio/play_start

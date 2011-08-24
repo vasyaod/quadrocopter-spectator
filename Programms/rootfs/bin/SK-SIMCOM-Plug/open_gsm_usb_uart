@@ -1,0 +1,12 @@
+#!/bin/ash
+
+# Script for SK-SIMCOM-Plug management
+
+press_gsm_pwr_key
+echo Only for SIM521X modems.
+echo Must be connected USB cable
+echo Wait for modem ready ...
+sleep 15
+echo Press Ctrl-X to exit
+echo Now can try type AT commans:
+microcom /dev/ttyUSB2

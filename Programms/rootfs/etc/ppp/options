@@ -1,0 +1,11 @@
+/dev/ttyUSB0
+defaultroute
+lock
+noauth
+local
+persist
+modem
+noipdefault
+logfile /var/log/ppp.log
+lcp-echo-interval 8
+lcp-echo-failure 3
