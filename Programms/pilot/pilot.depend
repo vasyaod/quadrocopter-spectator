@@ -1,0 +1,37 @@
+# depslib dependency file v1.0
+1314279636 source:/home/vasyaod/work/spectrator/Programms/pilot/main.cpp
+	<iostream>
+	<stdio.h>
+	<sys/ioctl.h>
+	<fcntl.h>
+	<linux/i2c.h>
+	<linux/i2c-dev.h>
+	"i2c.h"
+	"gyro.h"
+
+1314279189 /home/vasyaod/work/spectrator/Programms/pilot/i2c.h
+	<linux/types.h>
+
+1314279189 source:/home/vasyaod/work/spectrator/Programms/pilot/i2c.cpp
+	<stdio.h>
+	<sys/ioctl.h>
+	<fcntl.h>
+	<linux/i2c.h>
+	<linux/i2c-dev.h>
+	"i2c.h"
+
+1314279292 source:/home/vasyaod/work/spectrator/Programms/pilot/gyro.cpp
+	"i2c.h"
+	"gyro.h"
+
+1314278854 /home/vasyaod/work/spectrator/Programms/pilot/gyro.h
+
+1314280749 source:/home/vasyaod/work/spectrator/Programms/pilot/Gyro.cpp
+	"i2C.h"
+	"Gyro.h"
+
+1314279189 /home/vasyaod/work/spectrator/Programms/pilot/i2C.h
+	<linux/types.h>
+
+1314278854 /home/vasyaod/work/spectrator/Programms/pilot/Gyro.h
+
