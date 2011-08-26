@@ -1,4 +1,4 @@
-#include "i2C.h"
+#include "I2C.h"
 #include "Gyro.h"
 
 Gyro::Gyro(I2CBus * i2cBus)
@@ -8,10 +8,10 @@ Gyro::Gyro(I2CBus * i2cBus)
 
 void Gyro::refresh()
 {
-    if (i2cBus->read(0x19, 12, &angularVelocityByffer, 4) < 0)
+    if (i2cBus->read(0x19, 12, &angularVelocityBuffer, 4) < 0)
         return;
-    angularVelocityX = angularVelocityByffer.value2;
-    angularVelocityY = angularVelocityByffer.value1;
+    angularVelocityX = angularVelocityBuffer.value2;
+    angularVelocityY = angularVelocityBuffer.value1;
 }
 
 int Gyro::getAngularVelocityX()

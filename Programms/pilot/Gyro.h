@@ -10,11 +10,11 @@ class Gyro
         int angularVelocityX;      // Угловая скорость вокруг оси X.
         int angularVelocityY;      // Угловая скорость вокруг оси Y.
 
-        struct AngularVelocityByffer
+        struct AngularVelocityBuffer
         {
             unsigned short value1;
             unsigned short value2;
-        } angularVelocityByffer;
+        } angularVelocityBuffer;
 
     public:
         Gyro(I2CBus * i2cBus);
@@ -25,4 +25,4 @@ class Gyro
         int getAngularVelocityY();  // Угловая скорость вокруг оси Y.
 };
 
-#endif // _PILOT_I2C_H
+#endif // _PILOT_GYRO_H

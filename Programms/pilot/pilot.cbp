@@ -11,6 +11,10 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="armelfgcc" />
+				<Compiler>
+					<Add option="-Wno-write-strings" />
+					<Add option="-D__EXPORTED_HEADERS__" />
+				</Compiler>
 			</Target>
 			<Target title="Release">
 				<Option output="bin/Release/pilot" prefix_auto="1" extension_auto="1" />
@@ -19,6 +23,14 @@
 				<Option compiler="armelfgcc" />
 			</Target>
 		</Build>
+		<Unit filename="Accelerometer.cpp" />
+		<Unit filename="Accelerometer.h" />
+		<Unit filename="Gyro.cpp" />
+		<Unit filename="Gyro.h" />
+		<Unit filename="I2C.cpp" />
+		<Unit filename="I2C.h" />
+		<Unit filename="MotorController.cpp" />
+		<Unit filename="MotorController.h" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />

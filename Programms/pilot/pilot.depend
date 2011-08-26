@@ -1,13 +1,17 @@
 # depslib dependency file v1.0
-1314279636 source:/home/vasyaod/work/spectrator/Programms/pilot/main.cpp
+1314350520 source:/home/vasyaod/work/spectrator/Programms/pilot/main.cpp
 	<iostream>
 	<stdio.h>
 	<sys/ioctl.h>
 	<fcntl.h>
 	<linux/i2c.h>
 	<linux/i2c-dev.h>
-	"i2c.h"
-	"gyro.h"
+	<termios.h>
+	<unistd.h>
+	"I2C.h"
+	"Gyro.h"
+	"MotorController.h"
+	"Accelerometer.h"
 
 1314279189 /home/vasyaod/work/spectrator/Programms/pilot/i2c.h
 	<linux/types.h>
@@ -26,12 +30,36 @@
 
 1314278854 /home/vasyaod/work/spectrator/Programms/pilot/gyro.h
 
-1314280749 source:/home/vasyaod/work/spectrator/Programms/pilot/Gyro.cpp
-	"i2C.h"
+1314320356 source:/home/vasyaod/work/spectrator/Programms/pilot/Gyro.cpp
+	"I2C.h"
 	"Gyro.h"
 
 1314279189 /home/vasyaod/work/spectrator/Programms/pilot/i2C.h
 	<linux/types.h>
 
-1314278854 /home/vasyaod/work/spectrator/Programms/pilot/Gyro.h
+1314320355 /home/vasyaod/work/spectrator/Programms/pilot/Gyro.h
+
+1314279189 /home/vasyaod/work/spectrator/Programms/pilot/I2C.h
+	<linux/types.h>
+
+1314285432 source:/home/vasyaod/work/spectrator/Programms/pilot/I2C.cpp
+	<stdio.h>
+	<sys/ioctl.h>
+	<fcntl.h>
+	<linux/i2c.h>
+	<linux/i2c-dev.h>
+	"I2C.h"
+
+1314291290 source:/home/vasyaod/work/spectrator/Programms/pilot/MotorController.cpp
+	"I2C.h"
+	"MotorController.h"
+
+1314287843 /home/vasyaod/work/spectrator/Programms/pilot/MotorController.h
+
+1314350619 source:/home/vasyaod/work/spectrator/Programms/pilot/Accelerometer.cpp
+	<math.h>
+	"I2C.h"
+	"Accelerometer.h"
+
+1314350520 /home/vasyaod/work/spectrator/Programms/pilot/Accelerometer.h
 
