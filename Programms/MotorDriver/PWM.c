@@ -278,6 +278,7 @@ void pwm_check_in(int counter_value)
 //			in_values[i] /= FILTER;
 //			if (i == 0)
 //				set_out_value(0, in_value);
+			in_values[i] = in_value;
 		}
 	}
 

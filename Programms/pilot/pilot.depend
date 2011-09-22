@@ -1,17 +1,16 @@
 # depslib dependency file v1.0
-1314350520 source:/home/vasyaod/work/spectrator/Programms/pilot/main.cpp
+1316714141 source:/home/vasyaod/work/spectrator/Programms/pilot/main.cpp
 	<iostream>
-	<stdio.h>
-	<sys/ioctl.h>
 	<fcntl.h>
-	<linux/i2c.h>
-	<linux/i2c-dev.h>
+	<sys/time.h>
 	<termios.h>
 	<unistd.h>
 	"I2C.h"
 	"Gyro.h"
 	"MotorController.h"
 	"Accelerometer.h"
+	"AlfaBetaFilter.h"
+	"RadioControl.h"
 
 1314279189 /home/vasyaod/work/spectrator/Programms/pilot/i2c.h
 	<linux/types.h>
@@ -30,14 +29,19 @@
 
 1314278854 /home/vasyaod/work/spectrator/Programms/pilot/gyro.h
 
-1314320356 source:/home/vasyaod/work/spectrator/Programms/pilot/Gyro.cpp
+1314465919 source:/home/vasyaod/work/spectrator/Programms/pilot/Gyro.cpp
+	<math.h>
+	<fcntl.h>
+	<sys/time.h>
+	<termios.h>
+	<unistd.h>
 	"I2C.h"
 	"Gyro.h"
 
 1314279189 /home/vasyaod/work/spectrator/Programms/pilot/i2C.h
 	<linux/types.h>
 
-1314320355 /home/vasyaod/work/spectrator/Programms/pilot/Gyro.h
+1314454048 /home/vasyaod/work/spectrator/Programms/pilot/Gyro.h
 
 1314279189 /home/vasyaod/work/spectrator/Programms/pilot/I2C.h
 	<linux/types.h>
@@ -50,16 +54,34 @@
 	<linux/i2c-dev.h>
 	"I2C.h"
 
-1314291290 source:/home/vasyaod/work/spectrator/Programms/pilot/MotorController.cpp
+1314440693 source:/home/vasyaod/work/spectrator/Programms/pilot/MotorController.cpp
 	"I2C.h"
 	"MotorController.h"
 
-1314287843 /home/vasyaod/work/spectrator/Programms/pilot/MotorController.h
+1314362476 /home/vasyaod/work/spectrator/Programms/pilot/MotorController.h
 
-1314350619 source:/home/vasyaod/work/spectrator/Programms/pilot/Accelerometer.cpp
+1314428182 source:/home/vasyaod/work/spectrator/Programms/pilot/Accelerometer.cpp
 	<math.h>
 	"I2C.h"
 	"Accelerometer.h"
 
-1314350520 /home/vasyaod/work/spectrator/Programms/pilot/Accelerometer.h
+1314428182 /home/vasyaod/work/spectrator/Programms/pilot/Accelerometer.h
+
+1314439956 source:/home/vasyaod/work/spectrator/Programms/pilot/AlfaBetaFilter.cpp
+	<math.h>
+	<time.h>
+	<sys/timeb.h>
+	"Accelerometer.h"
+	"Gyro.h"
+	"AlfaBetaFilter.h"
+
+1314438351 /home/vasyaod/work/spectrator/Programms/pilot/AlfaBetaFilter.h
+
+1316712889 source:/home/vasyaod/work/spectrator/Programms/pilot/RadioControl.cpp
+	<math.h>
+	<stdlib.h>
+	"I2C.h"
+	"RadioControl.h"
+
+1316712584 /home/vasyaod/work/spectrator/Programms/pilot/RadioControl.h
 
