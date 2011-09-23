@@ -22,7 +22,7 @@ null::sysinit:/bin/mount -o remount,rw /
 #tty2::respawn:/sbin/getty 38400 tty2
 
 # Put a getty on the serial port
-ttyS0::respawn:/sbin/getty -L ttyS0 115200 vt100
+ttyS0::respawn:/sbin/getty -n -l /usr/bin/autologin -L ttyS0 115200 vt100
 
 # Logging junk
 null::sysinit:/bin/touch /var/log/messages
