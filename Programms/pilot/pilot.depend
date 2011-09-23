@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1316714141 source:/home/vasyaod/work/spectrator/Programms/pilot/main.cpp
+1316790403 source:/home/vasyaod/work/spectrator/Programms/pilot/main.cpp
 	<iostream>
 	<fcntl.h>
 	<sys/time.h>
@@ -54,11 +54,13 @@
 	<linux/i2c-dev.h>
 	"I2C.h"
 
-1314440693 source:/home/vasyaod/work/spectrator/Programms/pilot/MotorController.cpp
+1316793845 source:/home/vasyaod/work/spectrator/Programms/pilot/MotorController.cpp
+	<stdio.h>
+	<iostream>
 	"I2C.h"
 	"MotorController.h"
 
-1314362476 /home/vasyaod/work/spectrator/Programms/pilot/MotorController.h
+1316788833 /home/vasyaod/work/spectrator/Programms/pilot/MotorController.h
 
 1314428182 source:/home/vasyaod/work/spectrator/Programms/pilot/Accelerometer.cpp
 	<math.h>
