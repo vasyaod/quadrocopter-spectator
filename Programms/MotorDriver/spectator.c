@@ -14,6 +14,8 @@
 #include "I2C.h"
 //#include "SPISlave.h"
 
+u16 out_values_tmp[SERVO_COUNT];
+
 ISR(__vector_default)
 {
 
@@ -89,9 +91,16 @@ void i2c_write(u08 address, u08 data)
 		return;
 	else if (address < SERVO_COUNT*sizeof(u16))
 	{
-		u08 *_out_values = (u08*)get_out_values();
+		u08 *_out_values = (u08 *)out_values_tmp;
     	_out_values[address] = data;
 	}
+	else if (address == 0x20)
+	{
+		u16 *_out_values = get_out_values();
+		for (u08 i = 0; i < SERVO_COUNT; i++)
+			_out_values[i] = out_values_tmp[i];
+	}
+
 }
 
 u08 i2c_read(u08 address)
@@ -116,6 +125,9 @@ int main(void)
 	int f = 1;
 	// Врубаем прерывания.
 	sei();
+
+	for (int i = 0; i < SERVO_COUNT; i++)
+		out_values_tmp[i] = 0;
 
 	// Инициализируем UART.
 //	initUART();

@@ -311,30 +311,24 @@ void pwm_check_out2()
 	}
 	
 	if (counter < 2100)
-	{
 		next_ocr = 2100;
-		for (u08 i=0; i<SERVO_COUNT; i++)
-		{
-			u16 out_value = out_values[i];
-			if (out_value > 2100)
-				out_value = 2100;
-			if (out_value > 0 && out_value > counter)
-			{
-				out_pin(i, 1);	
-				if (next_ocr > out_value)
-					next_ocr = out_value;
-			}
-			else
-				out_pin(i, 0);	
-		}
-	}
-	else
+
+	for (u08 i=0; i<SERVO_COUNT; i++)
 	{
-		for (u08 i=0; i<SERVO_COUNT; i++)
+		u16 out_value = out_values[i];
+		if (out_value > 2100)
+			out_value = 2100;
+
+		if (out_value > 0 && out_value > counter)
 		{
-			out_pin(i, 0);	
+			out_pin(i, 1);	
+			if (next_ocr > out_value)
+				next_ocr = out_value;
 		}
+		else
+			out_pin(i, 0);
 	}
+
 
 	if (next_ocr > MAX_COUNT)
 		next_ocr = MAX_COUNT;
