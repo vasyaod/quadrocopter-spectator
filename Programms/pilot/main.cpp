@@ -78,8 +78,8 @@ int main(int argc, const char* argv[])
 
     int info = 0;
     int counter = 0;
-    float u = 70;
-    float k = 20;
+    float u = 2;
+    float k = 30;
     float angleXZ = 0;
     float angleYZ = 0;
     double xzFactor = 0;
@@ -99,7 +99,7 @@ int main(int argc, const char* argv[])
         alfaBetaFilter->refresh();
         radioControl->refresh();
 
-        if (counter == 5)
+        if (counter == 2)
         {
             counter = 0;
             if (info == 0)
@@ -167,11 +167,34 @@ int main(int argc, const char* argv[])
             {
                 char ch = getchar();
                 if (ch == 'w')
-                    motorController->setGear(motorController->getGear()+15);
+                {
+//                    if (motorController->getGear() < 1250)
+//                        motorController->setGear(1250);
+//                    else
+                        motorController->setGear(motorController->getGear()+15);
+                }
                 else if (ch == 's')
-                    motorController->setGear(motorController->getGear()-15);
+                {
+//                  if (motorController->getGear() < 1250)
+//                      motorController->setGear(1100);
+//                    else
+                        motorController->setGear(motorController->getGear()-15);
+
+                }
+//                else if (ch == 'q')
+//                   motorController->setGear(motorController->getGear()+5);
+//                else if (ch == 'a')
+//                    motorController->setGear(motorController->getGear()-5);
                 else if (ch == ' ') // По пробелу предусмотрен экстренный останов.
                     motorController->emergencyShutdown();
+                else if (ch == 'r')
+                    u += 0.1;
+                else if (ch == 'f')
+                    u -= 0.1;
+                else if (ch == 't')
+                    k += 0.1;
+                else if (ch == 'g')
+                    k -= 0.1;
                 else if (ch == 'z')
                 {
                     info++;
@@ -186,7 +209,7 @@ int main(int argc, const char* argv[])
         if (radioControl->getState2() > 1500)
             motorController->emergencyShutdown();
 
-        if (motorController->getGear() > 1500)
+        if (motorController->getGear() > 1250)
         {
             xzFactor = u*alfaBetaFilter->getAngularVelocityXZ() + k*alfaBetaFilter->getAngleXZ();
             yzFactor = u*alfaBetaFilter->getAngularVelocityYZ() + k*alfaBetaFilter->getAngleYZ();

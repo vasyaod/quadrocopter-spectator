@@ -1,3 +1,5 @@
+#include <stdio.h>
+#include <iostream>
 
 #include "I2C.h"
 #include "MotorController.h"
@@ -27,8 +29,39 @@ void MotorController::update()
     motorStateBuffer.value1 = motorValue1;
     motorStateBuffer.value3 = motorValue4;
     motorStateBuffer.value4 = motorValue3;
+/*
     if (i2cBus->write(0x19, 0, &motorStateBuffer, 12) < 0)
-      return;
+    {
+        std::cout << "MotorController buffer write error! " << std::endl;
+        printf("MotorController buffer write error!");
+        return;
+    }
+*/
+    i2cBus->write(0x19, 0, &motorValue2, 2);
+    i2cBus->write(0x19, 2, &motorValue1, 2);
+    i2cBus->write(0x19, 6, &motorValue4, 2);
+    i2cBus->write(0x19, 8, &motorValue3, 2);
+
+/*
+    if (i2cBus->write(0x19, 4, &motorValue4, 2) < 0)
+    {
+        printf("MotorController buffer write error!");
+        return;
+    }
+    if (i2cBus->write(0x19, 8, &motorValue3, 2) < 0)
+    {
+        printf("MotorController buffer write error!");
+        return;
+    }
+*/
+    int d = 1;
+    // Что бы подтвердить транзаю запишем любое значение по адресу 0x20
+    if (i2cBus->write(0x19, 0x20, &d, 2) < 0)
+    {
+        std::cout << "MotorController buffer write error! " << std::endl;
+        printf("MotorController transaction flag write error!");
+        return;
+    }
 }
 
 void MotorController::init()

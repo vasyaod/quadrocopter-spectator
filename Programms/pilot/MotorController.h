@@ -10,10 +10,10 @@ class MotorController
 
         bool inited;
 
-        int motorValue1;
-        int motorValue2;
-        int motorValue3;
-        int motorValue4;
+        unsigned short motorValue1;
+        unsigned short motorValue2;
+        unsigned short motorValue3;
+        unsigned short motorValue4;
 
         int gear;
         int xzFactor;
