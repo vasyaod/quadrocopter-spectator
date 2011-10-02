@@ -51,6 +51,7 @@ int main(int argc, const char* argv[])
 {
     i2cBus = new I2CBus("/dev/i2c-0");
     i2cBus->open();
+    std::cout << "I2C bus inited." << std::endl;
 
     if (argc > 1 && strcmp(argv[1], "--stop") == 0)
     {
@@ -60,26 +61,33 @@ int main(int argc, const char* argv[])
     }
 
     gyro = new Gyro(i2cBus);
+    std::cout << "Gyro inited." << std::endl;
 
     accelerometer = new Accelerometer(i2cBus);
  //   accelerometer->setOffsetAngleXZ(-0.0678582755555555);
  //   accelerometer->setOffsetAngleYZ(-0.0242676311111111);
     accelerometer->setOffsetAngleXZ(-0.073);
     accelerometer->setOffsetAngleYZ(-0.015);
+    std::cout << "Accelerometer inited." << std::endl;
 
     alfaBetaFilter = new AlfaBetaFilter(accelerometer, gyro);
+    std::cout << "AlfaBetaFilter inited." << std::endl;
 
     radioControl = new RadioControl(i2cBus, 10);
+    std::cout << "RadioControl inited." << std::endl;
 
     motorController = new MotorController(i2cBus);
     motorController->init();
+    std::cout << "MotorController inited." << std::endl;
 
+    std::cout << "MotorController collebration start." << std::endl;
     gyro->calibration(100);
+    std::cout << "MotorController collebration started." << std::endl;
 
     int info = 0;
     int counter = 0;
-    float u = 2;
-    float k = 30;
+    float u = 0.5;
+    float k = 60;
     float angleXZ = 0;
     float angleYZ = 0;
     double xzFactor = 0;
@@ -92,6 +100,12 @@ int main(int argc, const char* argv[])
     double avgFilterAngleXZ = 0;
     double avgFilterAngleYZ = 0;
     int filterAngleCount = 0;
+
+    bool radioControlEnabled = true;
+    bool radioControlInited = false;
+    double dx = 0;
+    double dy = 0;
+
 
     while(1)
     {
@@ -139,6 +153,8 @@ int main(int argc, const char* argv[])
                 << ", servo2: " << radioControl->getState2()
                 << ", servo3: " << radioControl->getState3()
                 << ", servo4: " << radioControl->getState4()
+                << ", dx: " << dx
+                << ", dy: " << dy
                 << std::endl;
             }
             if (info == 3)
@@ -195,6 +211,19 @@ int main(int argc, const char* argv[])
                     k += 0.1;
                 else if (ch == 'g')
                     k -= 0.1;
+                else if (ch == 'c')
+                {
+                    if (radioControlEnabled == true)
+                    {
+                        std::cout << "Radio control OFF!" << std::endl;
+                        radioControlEnabled = false;
+                    }
+                    else
+                    {
+                        std::cout << "Radio control ON!" << std::endl;
+                        radioControlEnabled = true;
+                    }
+                }
                 else if (ch == 'z')
                 {
                     info++;
@@ -203,16 +232,56 @@ int main(int argc, const char* argv[])
                 }
             }
         }
+
         counter ++;
 
-        // Аварийное выключение по пульту.
-        if (radioControl->getState2() > 1500)
-            motorController->emergencyShutdown();
+        dx = 0;
+        dy = 0;
 
-        if (motorController->getGear() > 1250)
+        // Радио управление инициализируется после того как заначение газа
+        // будет мимимальным.
+        if (radioControlInited == false &&
+            radioControl->getState2() < 1120 &&
+            radioControl->getState2() > 1090)
+            radioControlInited = true;
+
+        // Если включено радио управление испорльзуем данные с него
+        if (radioControlEnabled == true && radioControlInited == true )
         {
-            xzFactor = u*alfaBetaFilter->getAngularVelocityXZ() + k*alfaBetaFilter->getAngleXZ();
-            yzFactor = u*alfaBetaFilter->getAngularVelocityYZ() + k*alfaBetaFilter->getAngleYZ();
+            int gear = radioControl->getState2();
+            if (gear < 1130)
+                motorController->setGear(1100);
+            else
+                motorController->setGear(gear);
+
+            if (radioControl->getState3() < 1450)
+                dx = (1450 - radioControl->getState3()) / 50 * (3.14/180);
+            else if (radioControl->getState3() > 1550)
+                dx = (radioControl->getState3() - 1550) / 50 * (3.14/180);
+            else
+                dx = 0;
+
+            if (radioControl->getState4() < 1450)
+                dy = (1450 - radioControl->getState4()) / 50 * (3.14/180);
+            else if (radioControl->getState4() > 1550)
+                dy = (radioControl->getState4() - 1550) / 50 * (3.14/180);
+            else
+                dy = 0;
+        }
+        else // если не используем, то оставим только аварийное отключение.
+        {
+            // Аварийное выключение по пульту. Если газ на пульте будет больше
+            // 1500, то происходит отключение.
+            if (radioControl->getState2() > 1500)
+                motorController->emergencyShutdown();
+
+        }
+
+
+        if (motorController->getGear() > 1140)
+        {
+            xzFactor = u*alfaBetaFilter->getAngularVelocityXZ() + k*(alfaBetaFilter->getAngleXZ()-dy);
+            yzFactor = u*alfaBetaFilter->getAngularVelocityYZ() + k*(alfaBetaFilter->getAngleYZ()-dx);
           //  xzFactor += alfaBetaFilter->getGradusAngleXZ()*engleFactor;
           //  yzFactor += alfaBetaFilter->getGradusAngleYZ()*engleFactor;
         }

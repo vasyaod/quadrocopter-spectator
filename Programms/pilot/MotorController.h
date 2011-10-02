@@ -9,6 +9,7 @@ class MotorController
         I2CBus *i2cBus;
 
         bool inited;
+        bool refreshed;
 
         unsigned short motorValue1;
         unsigned short motorValue2;
