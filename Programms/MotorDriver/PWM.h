@@ -46,7 +46,7 @@ u16 *get_in_values();
 void pwm_check_in(int counter_value);
 
 void pwm_check_out(int counter_value);
-void pwm_check_out2();
+void pwm_check_out2(u16 counter_value);
 
 extern u16 loop_counter;
 

@@ -6,8 +6,11 @@
 #include "PWM.h"
 
 #define SERVO_FREQUENCY 50
-#define MAX_COUNT F_CPU/(SERVO_FREQUENCY*8)
+#define TIMER_FREQUENCY 64
+#define MAX_COUNT F_CPU/(SERVO_FREQUENCY*TIMER_FREQUENCY)
+#define MAX_POSIBLE (MAX_COUNT/200)*22
 #define FILTER 7
+
 
 //#define USE_INTERRUPT 0
 
@@ -55,13 +58,19 @@ void initPWM(out_pin_f _out_pin, in_pin_f _in_pin)
 	// Настройки счетчика Т1.
 	TCCR1A = 0;
 	// Установим делитель счетчика на 8 тактов.
-	TCCR1B = (0<<CS10) | (1<<CS11) | (0<<CS12);
+	if (TIMER_FREQUENCY == 8)
+		TCCR1B = (0<<CS10) | (1<<CS11) | (0<<CS12);
+	if (TIMER_FREQUENCY == 64)
+		TCCR1B = (1<<CS10) | (1<<CS11) | (0<<CS12);
 	
-	OCR1AH = (unsigned char)(MAX_COUNT>>8);
-	OCR1AL = (unsigned char)MAX_COUNT; 
+	OCR1AH = (u08)(MAX_COUNT>>8);
+	OCR1AL = (u08)MAX_COUNT; 
+	OCR1BH = (u08)(0>>8);
+	OCR1BL = (u08)0; 
+
 
 	// Настроки прерываний счетчиков, разрешаем прерывания.
-	TIMSK |= (1<<TOIE1) | (1<<OCIE1A);
+	TIMSK |= (1<<TOIE1) | (1<<OCIE1A) | (1<<OCIE1B);
 
 	//////////////////////
 	// Настройки входного ШИМ.
@@ -266,27 +275,24 @@ void pwm_check_in(int counter_value)
 			if (in_value < 0)
 				in_value = in_value + MAX_COUNT;
 
-//		    for (u08 j=FILTER-1; j>0; j--)
-//				in_values_tmp[i][j] = in_values_tmp[i][j-1];
-//			
-//			in_values_tmp[i][0] = in_value; 
+			in_value *= 4;
 			
-//			in_values[i] = 0;
-//		    for (u08 j=0; j<FILTER; j++)
-//				in_values[i] += in_values_tmp[i][j];
-			
-//			in_values[i] /= FILTER;
-//			if (i == 0)
-//				set_out_value(0, in_value);
-			in_values[i] = in_value;
+			if (in_value < 2100)
+				in_values[i] = in_value;
 		}
 	}
 
 }
 
+/**
+* Перехват переполнения таймера.
+*/
 ISR (TIMER1_OVF_vect)		
 {
 	DDRD |= (1<<PD0);
+
+	u16 counter_value = (TCNT1H<<8) | (TCNT1L);
+	pwm_check_out2(counter_value);
 }
 
 /**
@@ -294,89 +300,68 @@ ISR (TIMER1_OVF_vect)
 */
 ISR (TIMER1_COMPA_vect)		
 {
-	pwm_check_out2();
+	u16 counter_value = (TCNT1H<<8) | (TCNT1L);
+	pwm_check_out2(counter_value);
 }
 
-void pwm_check_out2()
+ISR (TIMER1_COMPB_vect)		
 {
-	u16 counter = (TCNT1H<<8) | (TCNT1L);
-	int next_ocr = MAX_COUNT;
+	u16 counter_value = (TCNT1H<<8) | (TCNT1L);
+	pwm_check_out2(counter_value);
+}
 
-	if (counter >= MAX_COUNT)
+void pwm_check_out2(u16 counter_value)
+{
+	u16 next_ocr;
+
+	if (counter_value >= MAX_COUNT)
 	{
 		loop_counter++;
 		TCNT1H = 0;
 		TCNT1L = 0;
-		counter = 0;
+		counter_value = 0;
 	}
-	
-	if (counter < 2100)
-		next_ocr = 2100;
 
-	for (u08 i=0; i<SERVO_COUNT; i++)
+	do 
 	{
-		u16 out_value = out_values[i];
-		if (out_value > 2100)
-			out_value = 2100;
-
-		if (out_value > 0 && out_value > counter)
-		{
-			out_pin(i, 1);	
-			if (next_ocr > out_value)
-				next_ocr = out_value;
-		}
-		else
-			out_pin(i, 0);
-	}
-
-
-	if (next_ocr > MAX_COUNT)
 		next_ocr = MAX_COUNT;
-	OCR1AH = (u08)(next_ocr>>8);
-	OCR1AL = (u08)next_ocr; 
-}
-
-int  old_counter1 = 0;
-void pwm_check_out(int counter_value)
-{
-	int r = counter_value - old_counter1;
-	if (r > 0 && r < 2)
-		return;
-	old_counter1 = counter_value;
-
-	if(out_off == 1 && counter_value > 2100)
-	{
+	
+		if (counter_value < MAX_POSIBLE)
+			next_ocr = MAX_POSIBLE;
+		
 		for (u08 i=0; i<SERVO_COUNT; i++)
 		{
-			out_pin(i, 0);
-			out_in_pin_state[i] = 0;
-		}
-		out_off = 0; 
-	}
-	else if (out_off == 0 && counter_value <= 2100)
-	{
-		for (u08 i=0; i<SERVO_COUNT; i++)
-		{
-			if (out_values[i] > 0)
+			u16 out_value = out_values[i];
+			if (out_value > MAX_POSIBLE)
+				out_value = MAX_POSIBLE;
+
+			if (out_value > 0 && out_value > counter_value)
 			{
 				out_pin(i, 1);
-				out_in_pin_state[i] = 1;
+				if (next_ocr > out_value)
+					next_ocr = out_value;
 			}
-		}
-		out_off = 1;
-	}
-	else if (out_off == 1 && counter_value <= 2100)
-	{
-		for (u08 i=0; i<SERVO_COUNT; i++)
-		{
-			if (out_in_pin_state[i] == 1 && out_values[i] < counter_value)
+			else
 			{
 				out_pin(i, 0);
-				out_in_pin_state[i] = 0;
 			}
-               	
 		}
-	}
+		counter_value = (TCNT1H<<8) | (TCNT1L);
+
+		if (next_ocr > MAX_COUNT)
+			next_ocr = MAX_COUNT;
+
+	} while (next_ocr <= counter_value);
 
 
+	OCR1AH = (u08)(next_ocr>>8);
+	OCR1AL = (u08)next_ocr; 
+
+//	next_ocr += 5;
+	OCR1BH = (u08)(next_ocr>>8);
+	OCR1BL = (u08)next_ocr; 
+	
+	TIFR = (1<<OCF1A)|(1<<OCF1B);
 }
+
+

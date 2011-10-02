@@ -40,6 +40,9 @@ void out_pin(u08 servo, u08 value)
 				PORTB &=~(1<<PB1);
 				break;
 	  		case 4:
+				PORTC &=~(1<<PC3);
+				break;
+	  		case 5:
 				PORTC &=~(1<<PC2);
 				break;
 		}
@@ -61,6 +64,9 @@ void out_pin(u08 servo, u08 value)
 				PORTB |= (1<<PB1);
 				break;
 	  		case 4:
+				PORTC |= (1<<PC3);
+				break;
+	  		case 5:
 				PORTC |= (1<<PC2);
 				break;
 		}
@@ -98,7 +104,9 @@ void i2c_write(u08 address, u08 data)
 	{
 		u16 *_out_values = get_out_values();
 		for (u08 i = 0; i < SERVO_COUNT; i++)
-			_out_values[i] = out_values_tmp[i];
+		{
+			_out_values[i] = out_values_tmp[i]/4;
+		}
 	}
 
 }
@@ -139,11 +147,9 @@ int main(void)
 	DDRD |= (1<<PD4);
 	DDRB |= (1<<PB1);
 	DDRC |= (1<<PC2);
-
-
+	DDRC |= (1<<PC3);
 
 	// Установка входных портов ШИМ.
-	DDRB &=~(1<<PB7);
 	DDRD &=~(1<<PD5);
 	DDRD &=~(1<<PD6);
 	DDRD &=~(1<<PD7);
@@ -171,17 +177,10 @@ int main(void)
 	{
 		cli();
 		int counter_value = (TCNT1L) | (TCNT1H<<8);
-		if (counter_value >= 20000)
-		{
-			pwm_check_out2();
-//			TCNT1H = 0;
-//			TCNT1L = 0;
-//			counter_value = 0;
-//			loop_counter++;
-		}
+		u16 ocr = (OCR1AH<<8) | (OCR1AL);
+		if ((u16)counter_value > ocr)
+			pwm_check_out2((u16)counter_value);
 		sei();
-
-
 
 		pwm_check_in(counter_value);
 //		pwm_check_out(counter_value);
